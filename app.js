@@ -110,3 +110,11 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwUpdiAwErR-EiOOKzO
     if (node) node.addEventListener("keydown", (e) => { if (e.key === "Enter") onSubmit(); });
   });
 })();
+function showToast(msg, type="ok", ms=3000){
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.style.background = type === "ok" ? "rgba(10,132,255,0.25)" : "rgba(239,68,68,0.25)";
+  toast.style.border = "1px solid " + (type==="ok" ? "rgba(10,132,255,0.6)" : "rgba(239,68,68,0.6)");
+  toast.style.display = "block";
+  setTimeout(()=> toast.style.display="none", ms);
+}
