@@ -1,7 +1,7 @@
 // app.js — GitHub UI → Google Apps Script webhook (form POST)
 
 // 👉 ΒΑΛΕ ΕΔΩ το Apps Script Web App URL σου (Deploy → Web app → URL που τελειώνει σε /exec)
-const WEB_APP_URL = "https://script.google.com/macros/s/PASTE_YOUR_ID_HERE/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwUpdiAwErR-EiOOKzO9PlORamuB0sPVVqB94EFE1OojWAI3ZTNLuHSdhPH3mywInBx/exec";
 
 (function(){
   const $ = (id) => document.getElementById(id);
