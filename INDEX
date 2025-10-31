@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LUS PROTOCOL — Καταχώριση LUS</title>
+  <style>
+    :root{
+      --blue:#0A84FF;          /* ηλεκτρικό μπλε */
+      --blue-dark:#086fe0;
+      --bg:#0b1220;            /* σκούρο φόντο */
+      --card:#101a2e;          /* κάρτα */
+      --text:#e9eefb;          /* κυρίως κείμενο */
+      --muted:#a9b6d9;         /* δευτερεύον */
+      --ok:#10b981;
+      --err:#ef4444;
+      --border:#1f2a44;
+      --input:#0f1830;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:linear-gradient(180deg,#0b1220 0%,#0b1220 40%,#0e1530 100%);
+      color:var(--text); font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
+      display:flex; align-items:center; justify-content:center; padding:24px;
+    }
+    .container{
+      width:100%; max-width:980px; display:grid; gap:16px;
+      grid-template-columns: 1.2fr 1fr;
+    }
+    .brand{
+      grid-column:1/-1; display:flex; align-items:center; justify-content:space-between;
+      padding:16px 20px; border:1px solid var(--border); border-radius:14px; background:linear-gradient(180deg,#0f1830,#0b1328);
+      box-shadow:0 10px 30px rgba(10,132,255,0.08), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .brand h1{margin:0; font-size:18px; letter-spacing:.5px}
+    .badge{
+      padding:6px 10px; border-radius:999px; background:rgba(10,132,255,.15); color:#cfe2ff; border:1px solid rgba(10,132,255,.35); font-size:12px;
+    }
+
+    .card{
+      background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .card h2{margin:0 0 12px 0; font-size:16px; color:#dce6ff}
+    .grid{display:grid; gap:12px}
+    .grid.cols-2{grid-template-columns:1fr 1fr}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    .grid.cols-4{grid-template-columns:repeat(4,1fr)}
+    label{font-size:12px; color:var(--muted); display:block; margin-bottom:6px}
+    input,select{
+      width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--input); color:var(--text);
+      outline:none; transition:.12s border-color ease;
+    }
+    input:focus,select:focus{border-color:var(--blue)}
+    .row{display:flex; gap:12px}
+    .btn{
+      appearance:none; border:none; border-radius:12px; padding:12px 16px; font-weight:600; cursor:pointer;
+      background:linear-gradient(180deg,var(--blue),var(--blue-dark)); color:white;
+      box-shadow:0 10px 24px rgba(10,132,255,.25), inset 0 1px 0 rgba(255,255,255,.25);
+      transition:transform .06s ease, filter .2s ease;
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn.secondary{
+      background:transparent; color:var(--text); border:1px solid var(--border);
+      box-shadow:none;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:999px;
+      background:rgba(10,132,255,.12); color:#cfe2ff; border:1px solid rgba(10,132,255,.28); font-size:12px;
+    }
+    .footer{grid-column:1/-1; display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:12px}
+    .toast{
+      position:fixed; right:16px; bottom:16px; background:#0f1a34; border:1px solid var(--border); color:var(--text);
+      padding:12px 14px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.35); display:none; max-width:70%;
+    }
+    .toast.ok{border-color:rgba(16,185,129,.35)}
+    .toast.err{border-color:rgba(239,68,68,.35)}
+    .kpi{display:flex; align-items:center; gap:10px; color:#cfe2ff}
+    .dot{width:8px; height:8px; border-radius:50%; background:var(--blue)}
+    @media (max-width:900px){
+      .container{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header / Brand -->
+    <div class="brand">
+      <h1>🩺 LUS PROTOCOL — Καταχώριση Ημερήσιου LUS</h1>
+      <span class="badge">ΠΓΝΙ • Πνευμονολογική Κλινική</span>
+    </div>
+
+    <!-- Αριστερή κάρτα: Ταυτότητα & Day -->
+    <div class="card">
+      <h2>Στοιχεία καταχώρισης</h2>
+      <div class="grid cols-2">
+        <div>
+          <label for="operator">Χειριστής (Operator)</label>
+          <select id="operator" required>
+            <option value="" disabled selected>— επίλεξε —</option>
+            <option>Ladias</option>
+            <option>Xronis</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="nps">NPS (Patient ID)</label>
+          <input id="nps" type="text" placeholder="π.χ. 123456" required />
+        </div>
+
+        <div>
+          <label for="firstName">Όνομα ασθενούς (προαιρετικό)</label>
+          <input id="firstName" type="text" />
+        </div>
+        <div>
+          <label for="lastName">Επώνυμο ασθενούς (προαιρετικό)</label>
+          <input id="lastName" type="text" />
+        </div>
+
+        <div>
+          <label for="admDate">Ημ. εισαγωγής (προαιρετικό)</label>
+          <input id="admDate" type="date" />
+        </div>
+        <div>
+          <label for="day">Ημέρα (D1–D7 ή Exit)</label>
+          <select id="day" required>
+            <option value="" disabled selected>— επίλεξε —</option>
+            <option>D1</option><option>D2</option><option>D3</option><option>D4</option>
+            <option>D5</option><option>D6</option><option>D7</option><option>Exit</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="lus">LUS score (0–36)</label>
+          <input id="lus" type="number" min="0" max="36" step="1" required />
+        </div>
+        <div class="kpi" style="align-self:end;">
+          <span class="dot"></span><span>Καταγράφονται μόνο τα **ημερήσια LUS scores** στο Matrix</span>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="submitBtn">Καταχώριση</button>
+        <button class="btn secondary" id="clearBtn">Καθαρισμός</button>
+      </div>
+    </div>
+
+    <!-- Δεξιά κάρτα: Γρήγορη βοήθεια & κατάσταση -->
+    <div class="card">
+      <h2>Γρήγορη βοήθεια</h2>
+      <div class="grid">
+        <div class="pill">Matrix ενημερώνεται “στην ίδια σειρά” ανά NPS → D1..D7/Exit</div>
+        <div class="pill">Δημιουργείται αυτόματα φύλλο ανά χειριστή: <b>OPR_&lt;Operator&gt;</b></div>
+        <div class="pill">Γράφονται logs στα: <b>LUS_ByUser</b>, <b>LUS_ByNPS</b></div>
+      </div>
+      <div style="margin-top:16px; color:var(--muted); font-size:13px">
+        Μετά την καταχώριση, άνοιξε το Sheet: <b>LUS_DailyMatrix</b> ή <b>OPR_... </b> για να δεις τη γραμμή του ασθενούς (NPS).
+      </div>
+    </div>
+
+    <div class="footer">
+      <div>© ΠΓΝΙ — LUS PROTOCOL</div>
+      <div>UI theme: ηλεκτρικό μπλε</div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- To app.js θα χειρίζεται το submit με google.script.run -->
+  <script src="app.js"></script>
+</body>
+</html>
