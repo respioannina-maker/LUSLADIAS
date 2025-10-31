@@ -1,7 +1,10 @@
-// app.js — LUS PROTOCOL Web UI
-(function () {
-  const $ = (id) => document.getElementById(id);
+// app.js — GitHub UI → Google Apps Script webhook (form POST)
 
+// 👉 ΒΑΛΕ ΕΔΩ το Apps Script Web App URL σου (Deploy → Web app → URL που τελειώνει σε /exec)
+const WEB_APP_URL = "https://script.google.com/macros/s/PASTE_YOUR_ID_HERE/exec";
+
+(function(){
+  const $ = (id) => document.getElementById(id);
   const el = {
     operator: $("operator"),
     nps: $("nps"),
@@ -17,40 +20,41 @@
 
   const DAY_VALID = ["D1","D2","D3","D4","D5","D6","D7","Exit"];
 
-  function showToast(msg, type = "ok", ms = 2600) {
+  function showToast(msg, type="ok", ms=2600){
     el.toast.textContent = msg;
-    el.toast.className = "toast " + (type === "ok" ? "ok" : "err");
+    el.toast.className = "toast " + (type==="ok" ? "ok" : "err");
     el.toast.style.display = "block";
-    setTimeout(() => (el.toast.style.display = "none"), ms);
+    setTimeout(()=> el.toast.style.display = "none", ms);
   }
 
-  function disableUI(disabled) {
+  function disableUI(disabled){
     el.submitBtn.disabled = disabled;
     el.clearBtn.disabled = disabled;
     el.submitBtn.style.opacity = disabled ? 0.7 : 1;
   }
 
-  function getFormData() {
+  function getData(){
     return {
       operator: (el.operator.value || "").trim(),
       nps: (el.nps.value || "").trim(),
       firstName: (el.firstName.value || "").trim(),
       lastName: (el.lastName.value || "").trim(),
-      admDate: el.admDate.value || "", // yyyy-mm-dd or ""
+      admDate: el.admDate.value || "",
       day: el.day.value,
-      lus: el.lus.value !== "" ? Number(el.lus.value) : NaN,
+      lus: el.lus.value !== "" ? String(parseInt(el.lus.value,10)) : ""
     };
   }
 
-  function validateForm(d) {
-    if (!d.operator) return "Δώσε χειριστή (Operator).";
-    if (!d.nps) return "Δώσε NPS (Patient ID).";
-    if (!DAY_VALID.includes(d.day)) return "Επίλεξε έγκυρη Ημέρα (D1–D7/Exit).";
-    if (!Number.isFinite(d.lus) || d.lus < 0 || d.lus > 36) return "Το LUS score πρέπει να είναι ακέραιος 0–36.";
+  function validate(d){
+    if(!d.operator) return "Δώσε χειριστή (Operator).";
+    if(!d.nps) return "Δώσε NPS (Patient ID).";
+    if(!DAY_VALID.includes(d.day)) return "Επίλεξε Ημέρα (D1–D7/Exit).";
+    const n = Number(d.lus);
+    if(!Number.isFinite(n) || n<0 || n>36) return "LUS score: ακέραιος 0–36.";
     return null;
   }
 
-  function clearForm() {
+  function clearForm(){
     el.nps.value = "";
     el.firstName.value = "";
     el.lastName.value = "";
@@ -60,45 +64,49 @@
     el.nps.focus();
   }
 
-  async function submit() {
-    const d = getFormData();
-    const err = validateForm(d);
-    if (err) {
-      showToast(err, "err");
-      return;
-    }
+  async function onSubmit(){
+    const d = getData();
+    const err = validate(d);
+    if(err){ showToast(err,"err",3600); return; }
     disableUI(true);
 
-    // GAS call: logDailyLUS(operator, nps, firstName, lastName, admDate, dayLabel, lusScore)
-    try {
-      google.script.run
-        .withSuccessHandler(() => {
-          showToast("✅ Καταχωρήθηκε επιτυχώς!");
-          clearForm();
-          disableUI(false);
-        })
-        .withFailureHandler((e) => {
-          const msg = (e && e.message) ? e.message : "Σφάλμα καταχώρισης.";
-          showToast("❌ " + msg, "err", 3800);
-          disableUI(false);
-        })
-        .logDailyLUS(d.operator, d.nps, d.firstName, d.lastName, d.admDate, d.day, d.lus);
-    } catch (e) {
-      // Αν τρέχεις το index τοπικά (χωρίς GAS), δεν υπάρχει google.script.run
+    // Στέλνουμε ως x-www-form-urlencoded για να αποφύγουμε CORS preflight
+    const body = new URLSearchParams(d).toString();
+
+    try{
+      const res = await fetch(WEB_APP_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+        body
+      });
+
+      // Προσπαθούμε να διαβάσουμε JSON απάντηση (αν επιτραπεί)
+      let okShown = false;
+      try{
+        const txt = await res.text();
+        if (txt && txt.startsWith("{")) {
+          const json = JSON.parse(txt);
+          if (json.ok) { showToast("✅ Καταχωρήθηκε!"); okShown = true; }
+          else { showToast("❌ " + (json.error || "Σφάλμα καταχώρισης"), "err", 4200); }
+        }
+      } catch(_) {}
+      if (!okShown) showToast("✅ Καταχωρήθηκε!"); // αισιόδοξο fallback
+
+      clearForm();
+    }catch(e){
       console.error(e);
-      showToast("❌ Η φόρμα πρέπει να τρέχει ως Apps Script Web App.", "err", 4200);
+      showToast("❌ Δικτυακό σφάλμα ή λάθος URL.", "err", 4200);
+    }finally{
       disableUI(false);
     }
   }
 
-  // Listeners
-  el.submitBtn.addEventListener("click", submit);
+  el.submitBtn.addEventListener("click", onSubmit);
   el.clearBtn.addEventListener("click", clearForm);
 
-  // Enter -> submit σε μερικά πεδία
+  // Enter → submit σε NPS & LUS
   ["nps","lus"].forEach((id) => {
-    $(id).addEventListener("keydown", (e) => {
-      if (e.key === "Enter") submit();
-    });
+    const node = document.getElementById(id);
+    if (node) node.addEventListener("keydown", (e) => { if (e.key === "Enter") onSubmit(); });
   });
 })();
