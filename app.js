@@ -186,3 +186,106 @@ el.clearBtn.addEventListener("click", clearForm);
 });
 // NPS → φέρε labs εισαγωγής από CRF_Master
 el.nps.addEventListener("change", async ()=>{ const r=await fetchCRFByNPS(el.nps.value); renderLabs(r); });
+/* === CRF Master submit === */
+
+// elements
+const CRF = {
+  operator: document.getElementById("crf_operator"),
+  nps:      document.getElementById("crf_nps"),
+  adm:      document.getElementById("crf_adm"),
+  first:    document.getElementById("crf_first"),
+  last:     document.getElementById("crf_last"),
+  sex:      document.getElementById("crf_sex"),
+  age:      document.getElementById("crf_age"),
+  bmi:      document.getElementById("crf_bmi"),
+  smoking:  document.getElementById("crf_smoking"),
+  dx:       document.getElementById("crf_dx"),
+  crp:      document.getElementById("crf_crp"),
+  pct:      document.getElementById("crf_pct"),
+  dd:       document.getElementById("crf_dd"),
+  wbc:      document.getElementById("crf_wbc"),
+  neut:     document.getElementById("crf_neut"),
+  lymph:    document.getElementById("crf_lymph"),
+  eos:      document.getElementById("crf_eos"),
+  mono:     document.getElementById("crf_mono"),
+  crea:     document.getElementById("crf_crea"),
+  urea:     document.getElementById("crf_urea"),
+  alt:      document.getElementById("crf_alt"),
+  ast:      document.getElementById("crf_ast"),
+  na:       document.getElementById("crf_na"),
+  k:        document.getElementById("crf_k"),
+  submit:   document.getElementById("crf_submit"),
+  clear:    document.getElementById("crf_clear"),
+};
+
+// map σε “αγγλικά keys” που ήδη χαρτογραφούνται στο backend → ελληνικά headers
+function crfPayload() {
+  const p = {
+    action: "crf",
+    operator: (CRF.operator?.value || "").trim(),
+    nps: (CRF.nps?.value || "").trim(),
+    admDate: CRF.adm?.value || "",
+    firstName: (CRF.first?.value || "").trim(),
+    lastName: (CRF.last?.value || "").trim(),
+    sex: CRF.sex?.value || "",
+    age: CRF.age?.value || "",
+    bmi: CRF.bmi?.value || "",
+    smoking: CRF.smoking?.value || "",
+    dx: (CRF.dx?.value || "").trim(),
+
+    crp: CRF.crp?.value || "",
+    pct: CRF.pct?.value || "",
+    ddimer: CRF.dd?.value || "",
+    wbc: CRF.wbc?.value || "",
+    neut: CRF.neut?.value || "",
+    lymph: CRF.lymph?.value || "",
+    eos: CRF.eos?.value || "",
+    mono: CRF.mono?.value || "",
+    crea: CRF.crea?.value || "",
+    urea: CRF.urea?.value || "",
+    alt: CRF.alt?.value || "",
+    ast: CRF.ast?.value || "",
+    na: CRF.na?.value || "",
+    k: CRF.k?.value || ""
+  };
+  return new URLSearchParams(p).toString();
+}
+
+function crfValidate() {
+  if (!CRF.operator?.value) return "Δώσε χειριστή.";
+  if (!CRF.nps?.value) return "Δώσε NPS.";
+  if (!CRF.adm?.value) return "Δώσε ημερομηνία εισαγωγής.";
+  return null;
+}
+
+async function submitCRF() {
+  const err = crfValidate();
+  if (err) { showToast(err, "err", 3800); return; }
+  try{
+    const res = await fetch(WEB_APP_URL, {
+      method: "POST",
+      headers: { "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
+      body: crfPayload()
+    });
+    const txt = await res.text();
+    if (txt && txt.startsWith("{")) {
+      const j = JSON.parse(txt);
+      if (j.ok) showToast("✅ CRF αποθηκεύτηκε!", "ok");
+      else showToast("❌ " + (j.error || "Σφάλμα CRF"), "err", 4200);
+    } else {
+      showToast("✅ CRF αποθηκεύτηκε!", "ok");
+    }
+    clearCRF();
+  } catch(e){
+    showToast("❌ Δικτυακό σφάλμα/URL", "err", 4200);
+  }
+}
+
+function clearCRF() {
+  const ids = ["crf_operator","crf_nps","crf_adm","crf_first","crf_last","crf_sex","crf_age","crf_bmi","crf_smoking","crf_dx",
+    "crf_crp","crf_pct","crf_dd","crf_wbc","crf_neut","crf_lymph","crf_eos","crf_mono","crf_crea","crf_urea","crf_alt","crf_ast","crf_na","crf_k"];
+  ids.forEach(id => { const n = document.getElementById(id); if (n) { if (n.tagName==="SELECT") n.value=""; else n.value=""; }});
+}
+
+CRF.submit?.addEventListener("click", submitCRF);
+CRF.clear?.addEventListener("click", clearCRF);
