@@ -5,66 +5,42 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>LUS PROTOCOL — LUS Daily</title>
   <style>
-    :root{
-      --blue:#0A84FF; --blue-dark:#086fe0; --bg:#0b1220; --card:#101a2e;
-      --text:#e9eefb; --muted:#a9b6d9; --ok:#10b981; --err:#ef4444; --border:#1f2a44; --input:#0f1830;
-    }
+    :root{ --blue:#0A84FF; --blue-dark:#086fe0; --bg:#0b1220; --card:#101a2e; --text:#e9eefb; --muted:#a9b6d9; --border:#1f2a44; --input:#0f1830; }
     *{box-sizing:border-box} html,body{height:100%}
-    body{
-      margin:0; background:linear-gradient(180deg,#0b1220 0%,#0b1220 40%,#0e1530 100%);
-      color:var(--text); font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;
-      display:flex; align-items:center; justify-content:center; padding:24px;
-    }
-    .container{width:100%; max-width:1050px; display:grid; gap:16px; grid-template-columns:1.1fr 1fr}
-    .brand{
-      grid-column:1/-1; display:flex; align-items:center; justify-content:space-between;
-      padding:16px 20px; border:1px solid var(--border); border-radius:14px;
-      background:linear-gradient(180deg,#0f1830,#0b1328);
-      box-shadow:0 10px 30px rgba(10,132,255,0.08), inset 0 1px 0 rgba(255,255,255,0.04);
-    }
-    .brand h1{margin:0; font-size:18px; letter-spacing:.4px}
-    .badge{padding:6px 10px; border-radius:999px; background:rgba(10,132,255,.15); color:#cfe2ff; border:1px solid rgba(10,132,255,.35); font-size:12px}
-
-    .card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px;
-      box-shadow:0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.04)}
-    .card h2{margin:0 0 12px 0; font-size:16px; color:#dce6ff}
-    .grid{display:grid; gap:12px}
+    body{margin:0;background:linear-gradient(180deg,#0b1220 0%,#0b1220 40%,#0e1530 100%);color:var(--text);
+      font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;display:flex;align-items:center;justify-content:center;padding:24px}
+    .container{width:100%;max-width:1080px;display:grid;gap:16px;grid-template-columns:1.1fr 1fr}
+    .brand{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border:1px solid var(--border);border-radius:14px;background:linear-gradient(180deg,#0f1830,#0b1328);box-shadow:0 10px 30px rgba(10,132,255,0.08), inset 0 1px 0 rgba(255,255,255,0.04)}
+    .brand h1{margin:0;color:#fff;font-size:22px;line-height:1.2}
+    .brand .sub{margin-top:4px;color:#cfe2ff;font-size:13px}
+    .badge{padding:6px 10px;border-radius:999px;background:rgba(10,132,255,.15);color:#cfe2ff;border:1px solid rgba(10,132,255,.35);font-size:12px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.04)}
+    .card h2{margin:0 0 12px 0;font-size:16px;color:#dce6ff}
+    .grid{display:grid;gap:12px}
     .cols-2{grid-template-columns:1fr 1fr}
     .cols-3{grid-template-columns:repeat(3,1fr)}
-    label{font-size:12px; color:var(--muted); display:block; margin-bottom:6px}
-    input,select{
-      width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border);
-      background:var(--input); color:var(--text); outline:none; transition:.12s border-color
-    }
-    input:focus,select:focus{border-color:var(--blue)}
-    .row{display:flex; gap:12px; flex-wrap:wrap}
-    .btn{
-      appearance:none; border:none; border-radius:12px; padding:12px 16px; font-weight:700; cursor:pointer;
-      background:linear-gradient(180deg,var(--blue),var(--blue-dark)); color:white;
-      box-shadow:0 10px 24px rgba(10,132,255,.25), inset 0 1px 0 rgba(255,255,255,.25);
-      transition:transform .06s ease;
-    }
-    .btn:active{transform:translateY(1px)}
-    .btn.secondary{background:transparent; color:var(--text); border:1px solid var(--border); box-shadow:none}
-    .pill{display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:999px;
-      background:rgba(10,132,255,.12); color:#cfe2ff; border:1px solid rgba(10,132,255,.28); font-size:12px}
-    .muted{color:var(--muted); font-size:12px}
-    .toast{
-      position:fixed; right:16px; bottom:16px; background:#0f1a34; border:1px solid var(--border); color:var(--text);
-      padding:12px 14px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.35); display:none; max-width:70%
-    }
-    .toast.ok{border-color:rgba(16,185,129,.45); background:rgba(16,185,129,.08)}
-    .toast.err{border-color:rgba(239,68,68,.45); background:rgba(239,68,68,.08)}
-    .hint{font-size:12px; color:#a9b6d9}
+    label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+    input,select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--input);color:var(--text);outline:none;transition:.12s border-color}
+    input:focus,select:focus{border-color:#0A84FF}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{appearance:none;border:none;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;background:linear-gradient(180deg,#0A84FF,#086fe0);color:white;box-shadow:0 10px 24px rgba(10,132,255,.25), inset 0 1px 0 rgba(255,255,255,.25);transition:transform .06s ease}
+    .btn:active{transform:translateY(1px)} .btn.secondary{background:transparent;color:var(--text);border:1px solid var(--border);box-shadow:none}
+    .muted{color:var(--muted);font-size:12px}
+    .toast{position:fixed;right:16px;bottom:16px;color:#eafff5;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.5);padding:12px 14px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.35);display:none;max-width:70%}
+    .toast.err{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.5);color:#ffecec}
+    .hint{font-size:12px;color:#a9b6d9}
     @media (max-width:980px){.container{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
   <div class="container">
-
+    <!-- Header -->
     <div class="brand">
-      <h1>🩺 LUS PROTOCOL — LUS Daily</h1>
-      <span class="badge">ΠΓΝΙ • Πνευμονολογική Κλινική</span>
+      <div>
+        <h1>Καθημερινή υπερηχογραφική παρακολούθηση (LUS) σε νοσηλευόμενους με ΟΑΑ</h1>
+        <div class="sub">Πνευμονολογική Κλινική — ΠΓΝ Ιωαννίνων</div>
+      </div>
+      <span class="badge">LUS PROTOCOL</span>
     </div>
 
     <!-- Αριστερά: Ταυτότητα & LUS -->
@@ -76,7 +52,7 @@
           <select id="operator" required>
             <option value="" disabled selected>— επίλεξε —</option>
             <option>Ladias</option>
-            <option>Xronis</option>
+            <option>Παπανικολάου</option>
             <option>Other</option>
           </select>
         </div>
@@ -104,7 +80,6 @@
             <option>D5</option><option>D6</option><option>D7</option><option>Exit</option>
           </select>
         </div>
-
         <div>
           <label for="lus">LUS score (0–36)</label>
           <input id="lus" type="number" min="0" max="36" step="1" required />
@@ -113,7 +88,6 @@
           <input id="hourly" type="checkbox" />
           <label for="hourly">Ωριαία καταγραφή</label>
         </div>
-
         <div>
           <label for="position">Θέση ασθενούς κατά την εξέταση</label>
           <select id="position">
@@ -170,9 +144,9 @@
       </div>
     </div>
 
-    <!-- Δεξιά: Οξυγόνωση & Υποστήριξη -->
+    <!-- Δεξιά: Οξυγόνωση & Ημερήσια labs extra -->
     <div class="card">
-      <h2>Οξυγόνωση & Υποστήριξη</h2>
+      <h2>Οξυγόνωση & Ημερήσια labs (extra)</h2>
       <div class="grid cols-2">
         <div>
           <label for="spo2">SpO₂ (%)</label>
@@ -183,7 +157,6 @@
           <input id="fio2" type="number" min="0.21" max="1" step="0.01" />
           <div class="hint">S/F ratio: <span id="sf">—</span></div>
         </div>
-
         <div>
           <label for="device">Συσκευή Ο₂</label>
           <select id="device">
@@ -199,7 +172,6 @@
           <label for="flow">Ροή (L/min)</label>
           <input id="flow" type="number" min="0" step="1" />
         </div>
-
         <div id="nivWrap" style="display:none">
           <label for="ipap">NIV IPAP (cmH₂O)</label>
           <input id="ipap" type="number" min="0" step="1" />
@@ -208,202 +180,34 @@
           <label for="epap">NIV EPAP (cmH₂O)</label>
           <input id="epap" type="number" min="0" step="1" />
         </div>
+        <div>
+          <label for="crp_extra">CRP (mg/L) — extra</label>
+          <input id="crp_extra" type="number" step="0.1" min="0" />
+        </div>
+        <div>
+          <label for="wbc_extra">WBC (×10⁹/L) — extra</label>
+          <input id="wbc_extra" type="number" step="0.1" min="0" />
+        </div>
       </div>
-
       <div style="margin-top:10px" class="muted">
-        * Τα παραπάνω πεδία είναι γρήγορη καταγραφή καθημερινής πορείας. Η πλήρης αρχική καταχώριση γίνεται στο CRF Master.
+        * Τα extra labs αφορούν μόνο τη σημερινή καταγραφή. Η πλήρης αρχική καταχώριση γίνεται στο CRF Master.
       </div>
+    </div>
+
+    <!-- Δεξιά: Εργαστηριακά από CRF_Master (εισαγωγή) -->
+    <div class="card" id="labsCard">
+      <h2>Εργαστηριακά (CRF Master — Ημέρα εισαγωγής)</h2>
+      <div class="muted" style="margin-bottom:8px">Φόρτωση με βάση το NPS</div>
+      <div id="labsBox" class="grid cols-2" style="gap:8px"><!-- γεμίζει δυναμικά --></div>
     </div>
 
     <div class="brand" style="justify-content:center">
-      <span class="pill">Μετά την καταχώριση, ενημερώνονται: LUS_DailyMatrix, OPR_Operator, LUS_ByUser, LUS_ByNPS.</span>
+      <span class="badge">Με την καταχώριση ενημερώνονται: LUS_DailyMatrix, OPR_Operator, LUS_ByUser, LUS_ByNPS, LUS_DailyDetails, LUS_DailyMatrixPlus.</span>
     </div>
-
   </div>
 
   <div id="toast" class="toast"></div>
 
-  <script>
-    // 👉 ΒΑΛΕ ΕΔΩ το Apps Script Web App URL (τελειώνει σε /exec)
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzE84R4M0kbf3sGwUAcQ-kMn67GsPC3-d-ctK66VDRJNIQhx0hppH-dDWaQrIZzBc3cjA/exec";
-
-    const $ = (id) => document.getElementById(id);
-    const el = {
-      operator:$("operator"), nps:$("nps"), firstName:$("firstName"), lastName:$("lastName"),
-      admDate:$("admDate"), day:$("day"), lus:$("lus"), hourly:$("hourly"),
-      position:$("position"),
-      pleural:$("pleural"), side:$("side"), ipd:$("ipd"), balik:$("balik"),
-      cons:$("cons"), pneumo:$("pneumo"),
-      spo2:$("spo2"), fio2:$("fio2"), sf:$("sf"),
-      device:$("device"), flow:$("flow"), ipap:$("ipap"), epap:$("epap"),
-      submitBtn:$("submitBtn"), clearBtn:$("clearBtn"),
-      pleuralSideWrap:document.getElementById("pleuralSideWrap"),
-      ipdWrap:document.getElementById("ipdWrap"),
-      flowWrap:document.getElementById("flowWrap"),
-      nivWrap:document.getElementById("nivWrap"),
-      nivWrap2:document.getElementById("nivWrap2"),
-      toast:$("toast")
-    };
-
-    const DAY_VALID=["D1","D2","D3","D4","D5","D6","D7","Exit"];
-
-    function showToast(msg,type="ok",ms=3000){
-      el.toast.textContent = msg;
-      el.toast.className = "toast " + (type==="ok" ? "ok" : "err");
-      el.toast.style.display = "block";
-      setTimeout(()=> el.toast.style.display="none", ms);
-    }
-
-    function disableUI(disabled){
-      el.submitBtn.disabled = disabled;
-      el.clearBtn.disabled  = disabled;
-      el.submitBtn.style.opacity = disabled ? 0.7 : 1;
-    }
-
-    function calcSF(){
-      const spo2 = Number(el.spo2.value);
-      const fio2 = Number(el.fio2.value);
-      if(Number.isFinite(spo2) && Number.isFinite(fio2) && fio2>=0.21 && fio2<=1 && spo2>0){
-        el.sf.textContent = Math.round(spo2 / fio2);
-      } else { el.sf.textContent = "—"; }
-    }
-
-    function calcBalik(){
-      const dmm = Number(el.ipd.value);
-      if(Number.isFinite(dmm) && dmm>=0){
-        el.balik.textContent = Math.round(20 * dmm); // Balik: 20 × D(mm)
-      } else { el.balik.textContent = "—"; }
-    }
-
-    function onPleuralChange(){
-      const v = el.pleural.value;
-      const show = (v==="Ναι");
-      el.pleuralSideWrap.style.display = show ? "" : "none";
-      el.ipdWrap.style.display = show ? "" : "none";
-    }
-
-    function onDeviceChange(){
-      const v = el.device.value;
-      el.flowWrap.style.display = (v==="HFNO" || v==="NC" || v==="Mask" || v==="Venturi") ? "" : "none";
-      const isNIV = (v==="NIV");
-      el.nivWrap.style.display  = isNIV ? "" : "none";
-      el.nivWrap2.style.display = isNIV ? "" : "none";
-    }
-
-    function getPayload(){
-      // LUS core (αυτά χρειάζεται σίγουρα ο server)
-      const core = {
-        operator: (el.operator.value||"").trim(),
-        nps:      (el.nps.value||"").trim(),
-        firstName:(el.firstName.value||"").trim(),
-        lastName: (el.lastName.value||"").trim(),
-        admDate:  el.admDate.value || "",
-        day:      el.day.value,
-        lus:      el.lus.value !== "" ? String(parseInt(el.lus.value,10)) : ""
-      };
-
-      // Επεκτάσεις (δεν είναι υποχρεωτικό να τα διαβάσει ο server — απλώς τα στέλνουμε)
-      const extras = {
-        hourly:   el.hourly.checked ? "Ναι" : "Όχι",
-        position: el.position.value,
-
-        pleural:  el.pleural.value,
-        side:     el.side.value,
-        ipd:      el.ipd.value,
-        balik:    (el.balik.textContent && el.balik.textContent!=="—") ? el.balik.textContent : "",
-
-        cons:     el.cons.value,
-        pneumo:   el.pneumo.value,
-
-        spo2:     el.spo2.value,
-        fio2:     el.fio2.value,
-        sf:       (el.sf.textContent && el.sf.textContent!=="—") ? el.sf.textContent : "",
-
-        device:   el.device.value,
-        flow:     el.flow.value,
-        ipap:     el.ipap.value,
-        epap:     el.epap.value
-      };
-
-      // Στέλνουμε ως x-www-form-urlencoded (για να αποφύγουμε CORS preflight)
-      const params = new URLSearchParams({...core, ...extras});
-      return params.toString();
-    }
-
-    function validate(){
-      if(!el.operator.value) return "Δώσε χειριστή (Operator).";
-      if(!el.nps.value) return "Δώσε NPS (Patient ID).";
-      if(!DAY_VALID.includes(el.day.value)) return "Επίλεξε Ημέρα (D1–D7/Exit).";
-      const n = Number(el.lus.value);
-      if(!Number.isFinite(n) || n<0 || n>36) return "LUS score: ακέραιος 0–36.";
-      return null;
-    }
-
-    async function submit(){
-      const err = validate();
-      if(err){ showToast(err,"err",3800); return; }
-      disableUI(true);
-
-      try{
-        const res = await fetch(WEB_APP_URL, {
-          method:"POST",
-          headers:{ "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
-          body:getPayload()
-        });
-
-        // αισιόδοξο success + προσπάθεια ανάγνωσης JSON
-        let okShown = false;
-        try{
-          const txt = await res.text();
-          if (txt && txt.startsWith("{")) {
-            const j = JSON.parse(txt);
-            if (j.ok) { showToast("✅ Καταχωρήθηκε επιτυχώς!"); okShown = true; }
-            else { showToast("❌ " + (j.error||"Σφάλμα καταχώρισης"),"err",4200); }
-          }
-        }catch(_){}
-        if(!okShown) showToast("✅ Καταχωρήθηκε επιτυχώς!");
-
-        clearForm();
-      }catch(e){
-        console.error(e);
-        showToast("❌ Δικτυακό σφάλμα ή λάθος URL.","err",4200);
-      }finally{
-        disableUI(false);
-      }
-    }
-
-    function clearForm(){
-      ["nps","firstName","lastName","admDate","lus","ipd","cons","spo2","fio2","flow","ipap","epap"].forEach(id=>{
-        const node = document.getElementById(id); if (node) node.value="";
-      });
-      ["day","position","pleural","side","pneumo","device"].forEach(id=>{
-        const node = document.getElementById(id); if (node) node.value="";
-      });
-      el.hourly.checked = false;
-      el.sf.textContent = "—";
-      el.balik.textContent = "—";
-      el.pleuralSideWrap.style.display = "none";
-      el.ipdWrap.style.display = "none";
-      el.flowWrap.style.display = "none";
-      el.nivWrap.style.display = "none";
-      el.nivWrap2.style.display = "none";
-      el.nps.focus();
-    }
-
-    // Listeners
-    el.fio2.addEventListener("input", calcSF);
-    el.spo2.addEventListener("input", calcSF);
-    el.ipd.addEventListener("input", calcBalik);
-    el.pleural.addEventListener("change", onPleuralChange);
-    el.device.addEventListener("change", onDeviceChange);
-    el.submitBtn.addEventListener("click", submit);
-    el.clearBtn.addEventListener("click", clearForm);
-
-    // Enter → submit σε NPS & LUS
-    ["nps","lus"].forEach(id=>{
-      const node = document.getElementById(id);
-      if(node) node.addEventListener("keydown",(e)=>{ if(e.key==="Enter") submit(); });
-    });
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
