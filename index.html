@@ -204,6 +204,91 @@
     <div class="brand" style="justify-content:center">
       <span class="badge">Με την καταχώριση ενημερώνονται: LUS_DailyMatrix, OPR_Operator, LUS_ByUser, LUS_ByNPS, LUS_DailyDetails, LUS_DailyMatrixPlus.</span>
     </div>
+    <!-- ===== CRF Master (εισαγωγή) — ΝΕΟ BLOCK ===== -->
+<div class="card" id="crfCard">
+  <h2>CRF Master — Εισαγωγή</h2>
+  <div class="muted" style="margin-bottom:8px">
+    Συμπλήρωσε τα αρχικά στοιχεία (ημέρα εισαγωγής). Τα daily περνούν από το LUS Daily.
+  </div>
+
+  <!-- Ταυτότητα -->
+  <div class="grid cols-3">
+    <div>
+      <label for="crf_operator">Χειριστής</label>
+      <input id="crf_operator" placeholder="π.χ. Παπανικολάου" />
+    </div>
+    <div>
+      <label for="crf_nps">NPS</label>
+      <input id="crf_nps" placeholder="π.χ. 12345" />
+    </div>
+    <div>
+      <label for="crf_adm">Ημ. εισαγωγής</label>
+      <input id="crf_adm" type="date" />
+    </div>
+  </div>
+
+  <!-- Δημογραφικά -->
+  <h3 class="muted" style="margin:12px 0 0">Δημογραφικά</h3>
+  <div class="grid cols-3">
+    <div><label for="crf_first">Όνομα</label><input id="crf_first" /></div>
+    <div><label for="crf_last">Επώνυμο</label><input id="crf_last" /></div>
+    <div>
+      <label for="crf_sex">Φύλο</label>
+      <select id="crf_sex"><option value="" disabled selected>—</option><option>Άνδρας</option><option>Γυναίκα</option></select>
+    </div>
+    <div><label for="crf_age">Ηλικία</label><input id="crf_age" type="number" min="0" /></div>
+    <div><label for="crf_bmi">BMI</label><input id="crf_bmi" type="number" step="0.1" /></div>
+    <div>
+      <label for="crf_smoking">Κάπνισμα (Ν/Ο)</label>
+      <select id="crf_smoking"><option value="" disabled selected>—</option><option>Ναι</option><option>Όχι</option></select>
+    </div>
+  </div>
+
+  <!-- Ιστορικό -->
+  <h3 class="muted" style="margin:12px 0 0">Ιστορικό (Ναι/Όχι)</h3>
+  <div class="grid cols-3">
+    <div><label for="crf_copd">ΧΑΠ</label><select id="crf_copd"><option>Όχι</option><option>Ναι</option></select></div>
+    <div><label for="crf_asthma">Άσθμα</label><select id="crf_asthma"><option>Όχι</option><option>Ναι</option></select></div>
+    <div><label for="crf_hf">Καρδ. ανεπάρκεια</label><select id="crf_hf"><option>Όχι</option><option>Ναι</option></select></div>
+    <div><label for="crf_cad">Στεφανιαία νόσος</label><select id="crf_cad"><option>Όχι</option><option>Ναι</option></select></div>
+    <div><label for="crf_af">Κολπική μαρμαρυγή</label><select id="crf_af"><option>Όχι</option><option>Ναι</option></select></div>
+    <div><label for="crf_dm">ΣΔ</label><select id="crf_dm"><option>Όχι</option><option>Ναι</option></select></div>
+    <div><label for="crf_hlp">Υπερλιπιδαιμία</label><select id="crf_hlp"><option>Όχι</option><option>Ναι</option></select></div>
+    <div><label for="crf_htn">Αρτ. υπέρταση</label><select id="crf_htn"><option>Όχι</option><option>Ναι</option></select></div>
+  </div>
+
+  <!-- Διάγνωση -->
+  <h3 class="muted" style="margin:12px 0 0">Διάγνωση εισαγωγής</h3>
+  <div class="grid">
+    <input id="crf_dx" placeholder="π.χ. Οξεία αναπνευστική ανεπάρκεια σε έδαφος..." />
+  </div>
+
+  <!-- Εργαστηριακά εισαγωγής -->
+  <h3 class="muted" style="margin:12px 0 0">Εργαστηριακά (ημέρα εισαγωγής)</h3>
+  <div class="grid cols-3">
+    <div><label for="crf_crp">CRP</label><input id="crf_crp" type="number" step="0.1" /></div>
+    <div><label for="crf_pct">PCT</label><input id="crf_pct" type="number" step="0.01" /></div>
+    <div><label for="crf_dd">D-dimer</label><input id="crf_dd" type="number" step="0.1" /></div>
+    <div><label for="crf_wbc">WBC</label><input id="crf_wbc" type="number" step="0.1" /></div>
+    <div><label for="crf_neut">Ουδετ. %</label><input id="crf_neut" type="number" step="0.1" /></div>
+    <div><label for="crf_lymph">Λεμφοκ. %</label><input id="crf_lymph" type="number" step="0.1" /></div>
+    <div><label for="crf_eos">Ηωσινόφ. %</label><input id="crf_eos" type="number" step="0.1" /></div>
+    <div><label for="crf_mono">Μονοκ. %</label><input id="crf_mono" type="number" step="0.1" /></div>
+    <div><label for="crf_crea">Κρεατινίνη</label><input id="crf_crea" type="number" step="0.01" /></div>
+    <div><label for="crf_urea">Ουρία</label><input id="crf_urea" type="number" step="0.1" /></div>
+    <div><label for="crf_alt">ALT</label><input id="crf_alt" type="number" step="0.1" /></div>
+    <div><label for="crf_ast">AST</label><input id="crf_ast" type="number" step="0.1" /></div>
+    <div><label for="crf_na">Na</label><input id="crf_na" type="number" step="0.1" /></div>
+    <div><label for="crf_k">K</label><input id="crf_k" type="number" step="0.1" /></div>
+  </div>
+
+  <div class="row" style="margin-top:14px">
+    <button class="btn" id="crf_submit">Καταχώριση CRF</button>
+    <button class="btn secondary" id="crf_clear">Καθαρισμός</button>
+  </div>
+</div>
+<!-- ===== ΤΕΛΟΣ CRF BLOCK ===== -->
+
   </div>
 
   <div id="toast" class="toast"></div>
