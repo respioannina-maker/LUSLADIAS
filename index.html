@@ -2,29 +2,27 @@
 <html lang="el">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUS Protocol</title>
-<link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>LUS Protocol — CRF + LUS</title>
 <style>
-  :root {
-    --bg:#f6f8fb; --card:#fff; --border:#d8e1f2; --text:#1b2559;
-    --accent:#0a84ff;
-  }
-  body {font-family:Arial, sans-serif;background:var(--bg);color:var(--text);margin:0;padding:0}
-  .container {max-width:1100px;margin:30px auto;padding:20px}
-  .brand {font-size:1.6em;font-weight:bold;margin-bottom:10px;color:var(--accent)}
-  .tabs {display:flex;gap:10px;margin-bottom:20px;}
-  .tabbtn {padding:10px 16px;border-radius:10px;border:1px solid var(--border);cursor:pointer;background:var(--card);}
-  .tabbtn.active {border-color:var(--accent);box-shadow:0 0 0 2px rgba(10,132,255,0.25) inset;}
-  .card {background:var(--card);padding:20px;border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,.05);margin-bottom:20px;}
-  .grid {display:grid;gap:10px}
-  .cols-2 {grid-template-columns:repeat(2,1fr)}
-  .cols-3 {grid-template-columns:repeat(3,1fr)}
-  label {font-size:0.9em;color:#637198}
-  input, select {width:100%;padding:8px;border:1px solid var(--border);border-radius:6px}
-  .btn {background:var(--accent);color:#fff;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:bold}
-  .btn.secondary {background:#e0e6f8;color:#0a84ff}
+  :root{ --bg:#f6f8fb; --card:#fff; --border:#d8e1f2; --text:#1b2559; --accent:#0a84ff; }
+  body{font-family:Arial, sans-serif;background:var(--bg);color:var(--text);margin:0}
+  .container{max-width:1100px;margin:30px auto;padding:20px}
+  .brand{font-size:1.6em;font-weight:700;margin-bottom:10px;color:var(--accent)}
+  .tabs{display:flex;gap:10px;margin:10px 0 20px}
+  .tabbtn{padding:10px 16px;border-radius:10px;border:1px solid var(--border);cursor:pointer;background:var(--card)}
+  .tabbtn.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(10,132,255,.25) inset}
+  .card{background:var(--card);padding:20px;border-radius:14px;box-shadow:0 2px 6px rgba(0,0,0,.05);margin-bottom:20px}
+  .grid{display:grid;gap:10px}
+  .cols-2{grid-template-columns:repeat(2,1fr)}
+  .cols-3{grid-template-columns:repeat(3,1fr)}
+  label{font-size:.9em;color:#637198}
+  input,select{width:100%;padding:8px;border:1px solid var(--border);border-radius:6px}
+  h2{margin-top:0}
+  .btn{background:var(--accent);color:#fff;border:none;padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:bold}
+  .btn.secondary{background:#e0e6f8;color:#0a84ff}
   .hidden{display:none}
+  .muted{color:#6f7ca5;font-size:.9em}
 </style>
 </head>
 <body>
@@ -32,18 +30,98 @@
   <div class="brand">Πνευμονολογική Κλινική ΠΓΝΙ — LUS Protocol</div>
 
   <div class="tabs">
-    <button class="tabbtn active" id="tab-lus">LUS Daily</button>
-    <button class="tabbtn" id="tab-crf">CRF (Εισαγωγής)</button>
+    <button class="tabbtn active" id="tab-combined">Εισαγωγή + D1 LUS (ίδια γραμμή/NPS)</button>
+    <button class="tabbtn" id="tab-lus">LUS Daily (D2–D7/Exit)</button>
   </div>
 
-  <!-- ===== LUS DAILY ===== -->
-  <section id="view-lus">
+  <!-- ===== 1) COMBINED: CRF + D1 LUS ===== -->
+  <section id="view-combined">
     <div class="card">
-      <h2>Καθημερινή Καταγραφή (LUS)</h2>
+      <h2>CRF (εισαγωγής) + D1 LUS</h2>
+
+      <!-- Ταυτότητα -->
+      <div class="grid cols-3">
+        <div><label>Χειριστής</label><input id="cmb_operator" placeholder="Παπανικολάου"></div>
+        <div><label>NPS</label><input id="cmb_nps"></div>
+        <div><label>Ημ. εισαγωγής</label><input id="cmb_adm" type="date"></div>
+
+        <div><label>Όνομα</label><input id="cmb_first"></div>
+        <div><label>Επώνυμο</label><input id="cmb_last"></div>
+        <div>
+          <label>Φύλο</label>
+          <select id="cmb_sex"><option value="" disabled selected>—</option><option>Άνδρας</option><option>Γυναίκα</option></select>
+        </div>
+        <div><label>Ηλικία</label><input id="cmb_age" type="number" min="0"></div>
+        <div><label>BMI</label><input id="cmb_bmi" type="number" step="0.1" min="0"></div>
+        <div>
+          <label>Κάπνισμα</label>
+          <select id="cmb_smoking"><option value="" disabled selected>—</option><option>Όχι</option><option>Ναι</option></select>
+        </div>
+      </div>
+
+      <!-- Ιστορικό -->
+      <h3>Ιστορικό (Ναι/Όχι)</h3>
+      <div class="grid cols-3">
+        <div><label>ΧΑΠ</label><select id="cmb_copd"><option>Όχι</option><option>Ναι</option></select></div>
+        <div><label>Άσθμα</label><select id="cmb_asthma"><option>Όχι</option><option>Ναι</option></select></div>
+        <div><label>Καρδ. ανεπάρκεια</label><select id="cmb_hf"><option>Όχι</option><option>Ναι</option></select></div>
+        <div><label>Στεφανιαία νόσος</label><select id="cmb_cad"><option>Όχι</option><option>Ναι</option></select></div>
+        <div><label>AF</label><select id="cmb_af"><option>Όχι</option><option>Ναι</option></select></div>
+        <div><label>ΣΔ</label><select id="cmb_dm"><option>Όχι</option><option>Ναι</option></select></div>
+        <div><label>Υπερλιπιδαιμία</label><select id="cmb_hlp"><option>Όχι</option><option>Ναι</option></select></div>
+        <div><label>Αρτ. υπέρταση</label><select id="cmb_htn"><option>Όχι</option><option>Ναι</option></select></div>
+      </div>
+
+      <!-- Διάγνωση -->
+      <h3>Διάγνωση εισαγωγής</h3>
+      <input id="cmb_dx" placeholder="π.χ. Οξεία αναπνευστική ανεπάρκεια σε έδαφος...">
+
+      <!-- Εργαστηριακά εισαγωγής (ΟΛΑ) -->
+      <h3>Εργαστηριακά (ημέρα εισαγωγής)</h3>
+      <div class="grid cols-3">
+        <div><label>CRP</label><input id="cmb_crp" type="number" step="0.1"></div>
+        <div><label>PCT</label><input id="cmb_pct" type="number" step="0.01"></div>
+        <div><label>D-dimer</label><input id="cmb_dd" type="number" step="0.1"></div>
+        <div><label>WBC</label><input id="cmb_wbc" type="number" step="0.1"></div>
+        <div><label>Ουδετ %</label><input id="cmb_neut" type="number" step="0.1"></div>
+        <div><label>Λεμφο %</label><input id="cmb_lymph" type="number" step="0.1"></div>
+        <div><label>Ηωσινόφ %</label><input id="cmb_eos" type="number" step="0.1"></div>
+        <div><label>Μονο %</label><input id="cmb_mono" type="number" step="0.1"></div>
+        <div><label>Κρεατινίνη</label><input id="cmb_crea" type="number" step="0.01"></div>
+        <div><label>Ουρία</label><input id="cmb_urea" type="number" step="0.1"></div>
+        <div><label>ALT</label><input id="cmb_alt" type="number" step="0.1"></div>
+        <div><label>AST</label><input id="cmb_ast" type="number" step="0.1"></div>
+        <div><label>Na</label><input id="cmb_na" type="number" step="0.1"></div>
+        <div><label>K</label><input id="cmb_k" type="number" step="0.1"></div>
+        <div><label>SpO₂ (εισαγ.)</label><input id="cmb_spo2_adm" type="number" step="1"></div>
+        <div><label>FiO₂ (εισαγ.)</label><input id="cmb_fio2_adm" type="number" step="0.01" min="0.21" max="1"></div>
+      </div>
+
+      <!-- D1 LUS -->
+      <h3>D1 LUS</h3>
+      <div class="grid cols-3">
+        <div><label>LUS score D1 (0–36)</label><input id="cmb_lus_d1" type="number" min="0" max="36"></div>
+        <div><label>SpO₂ D1 (%)</label><input id="cmb_spo2_d1" type="number"></div>
+        <div><label>CRP D1 (extra)</label><input id="cmb_crp_d1" type="number" step="0.1"></div>
+        <div><label>WBC D1 (extra)</label><input id="cmb_wbc_d1" type="number" step="0.1"></div>
+      </div>
+
+      <div style="margin-top:12px">
+        <button class="btn" id="cmb_submit">Καταχώριση (CRF + D1 LUS)</button>
+        <span class="muted">Αν αφήσεις κενό το LUS D1, θα γραφτεί μόνο το CRF.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 2) LUS DAILY (ξεχωριστό) ===== -->
+  <section id="view-lus" class="hidden">
+    <div class="card">
+      <h2>LUS Daily (D2–D7/Exit)</h2>
       <div class="grid cols-3">
         <div><label>Χειριστής</label><input id="lus_operator" placeholder="Παπανικολάου"></div>
         <div><label>NPS</label><input id="lus_nps"></div>
-        <div><label>Ημέρα</label>
+        <div>
+          <label>Ημέρα</label>
           <select id="lus_day">
             <option>D1</option><option>D2</option><option>D3</option><option>D4</option>
             <option>D5</option><option>D6</option><option>D7</option><option>Exit</option>
@@ -53,48 +131,11 @@
       <div class="grid cols-2" style="margin-top:10px">
         <div><label>LUS score (0–36)</label><input id="lus_score" type="number" min="0" max="36"></div>
         <div><label>SpO₂ (%)</label><input id="lus_spo2" type="number"></div>
-        <div><label>CRP (mg/L)</label><input id="lus_crp" type="number" step="0.1"></div>
-        <div><label>Λευκά (K/μL)</label><input id="lus_wbc" type="number" step="0.1"></div>
+        <div><label>CRP (extra)</label><input id="lus_crp" type="number" step="0.1"></div>
+        <div><label>WBC (extra)</label><input id="lus_wbc" type="number" step="0.1"></div>
       </div>
       <div style="margin-top:12px">
         <button class="btn" id="lus_submit">Καταχώριση LUS</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== CRF MASTER ===== -->
-  <section id="view-crf" class="hidden">
-    <div class="card">
-      <h2>CRF Master — Ημέρα Εισαγωγής</h2>
-      <div class="grid cols-3">
-        <div><label>Χειριστής</label><input id="crf_operator"></div>
-        <div><label>NPS</label><input id="crf_nps"></div>
-        <div><label>Ημ. εισαγωγής</label><input id="crf_adm" type="date"></div>
-      </div>
-      <div class="grid cols-3" style="margin-top:10px">
-        <div><label>Όνομα</label><input id="crf_first"></div>
-        <div><label>Επώνυμο</label><input id="crf_last"></div>
-        <div><label>Φύλο</label><select id="crf_sex"><option>Άνδρας</option><option>Γυναίκα</option></select></div>
-        <div><label>Ηλικία</label><input id="crf_age" type="number"></div>
-        <div><label>BMI</label><input id="crf_bmi" type="number" step="0.1"></div>
-        <div><label>Κάπνισμα</label><select id="crf_smoking"><option>Όχι</option><option>Ναι</option></select></div>
-      </div>
-
-      <h3>Διάγνωση</h3>
-      <input id="crf_dx" placeholder="π.χ. Οξεία αναπνευστική ανεπάρκεια σε έδαφος ΧΑΠ">
-
-      <h3 style="margin-top:10px">Εργαστηριακά</h3>
-      <div class="grid cols-3">
-        <div><label>CRP</label><input id="crf_crp" type="number"></div>
-        <div><label>WBC</label><input id="crf_wbc" type="number"></div>
-        <div><label>D-dimer</label><input id="crf_dd" type="number"></div>
-        <div><label>PCT</label><input id="crf_pct" type="number"></div>
-        <div><label>Na</label><input id="crf_na" type="number"></div>
-        <div><label>K</label><input id="crf_k" type="number"></div>
-      </div>
-
-      <div style="margin-top:14px">
-        <button class="btn" id="crf_submit">Καταχώριση CRF</button>
       </div>
     </div>
   </section>
