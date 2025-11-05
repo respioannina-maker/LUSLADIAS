@@ -1,5 +1,5 @@
 // === ΒΑΛΕ ΤΟ ΔΙΚΟ ΣΟΥ WEB APP URL ===
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxc4izbaTWrwv_Dx__6CRespXE-jrZf_UPAiznyJF-rOHpEIYhZ57H80CdijTOs4l96OQ/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwiTCgKlnzfeotJSkwlRmwq4k-bQyaxLPBSj85bzdLa3uqcdTYueWGRWtI1bF-gVcxSYA/exec";
 
 // Tabs
 const tabCombined = document.getElementById("tab-combined");
