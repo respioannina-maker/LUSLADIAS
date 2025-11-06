@@ -1,5 +1,5 @@
 // ====== CONFIG ======
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyXXoZDdg5GhNuJg4D1nfy5laNjDCgaxHZpvnnojo-WeTG-4ZgeV8-V9OI2sWZNgkh_-w/exec"; // <-- βάλε το δικό σου
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzjhITPy3A0iMIm0IUNQyZ8QSb1vXqtfCx1_CBmevIwfRi_mXk-ygO6tLLYsDPg_ZnRDg/exec"; // <-- βάλε το δικό σου
 
 // ====== helpers ======
 const $ = id => document.getElementById(id);
